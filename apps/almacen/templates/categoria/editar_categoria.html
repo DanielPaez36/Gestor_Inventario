@@ -1,0 +1,51 @@
+{% extends "layouts/plantilla.html" %}
+{% load static %}
+
+{% block title %}
+Editar-Categoria
+{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="mt-4 text-center">EDITAR CATEGORIA</h1>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">EDITAR CATEGORIA</h1>
+            </div>
+            <div class="modal-body">
+                <!--Formulario-->
+                <form action="{% url "procesar_editar_categoria" %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="id" value="{{categoria.id}}" hidden name="id" id="id"/>
+                    <div class="mb-4">
+                        <label for="" class="form-label">Tipo de categoria</label>
+                        <input type="text" name="nombre_cat" id="nombre_cat" required class="form-control" value="{{categoria.nombre_cat}}">
+                    </div>
+                    <div class="mb-4">
+                        <label for="" class="form-label">Descripción</label>
+                        <input type="text" name="descripcion_cat" id="descripcion_cat" required class="form-control" value="{{categoria.descripcion_cat}}">
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{% url "categorias" %}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Actualizar Carrera</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById('exampleModal')
+    document.addEventListener('DOMContentLoaded', () => {
+        const myModal = new bootstrap.Modal(modal)
+        myModal.show()
+    })
+</script>
+
+{% endblock content %}

@@ -1,0 +1,77 @@
+{% extends "layouts/plantilla.html" %}
+{% load static %}
+
+{% block title %}
+Categoria-Productos
+{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <!--Titulo-->
+    <h1 class="text-center mt-4">CATEGORIAS</h1>
+        <!--Verifica si hay caegorias-->
+        <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Agregar Categoria</button>
+        {% if categorias %}
+        <div class="table-responsive">
+            <table class="table table-hover table-striped text-center" id="tabla">
+                <thead class="thead-primary">
+                    <tr>
+                        <th>Tipo de categoria</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for categoria in categorias %}
+                        <tr>
+                            <td>{{categoria.nombre_cat}}</td>
+                            <td>{{categoria.descripcion_cat}}</td>
+                            <td>
+                                <a href="{% url 'editar_categoria' id=categoria.id %}" class="btn btn-warning">Editar</a>
+                                <a href="javascript:void(0)" onclick="eliminarFila('/eliminar_categoria/{{ categoria.id }}', 'Categoria')" class="btn btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning mt-4 text-center">NO HAY REGISTROS</div>
+        {% endif %}
+</div>
+
+<!-- Modal Agregar Categoria -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar categoria</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para agregar categoria -->
+                 <form action="{% url 'crear_categoria' %}" method="POST" id="form_categoria">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="nombre_cat" class="form-label">Tipo de categoria</label>
+                        <input type="text" name="nombre_cat" placeholder="Salsas" id="nombre_cat" required class="form-control" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="descripcion_cat" class="form-label">Descripción</label>
+                        <input type="text" name="descripcion_cat" placeholder="Salsas" id="descripcion_cat" required class="form-control" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Agregar Categoria</button>
+                      </div>
+                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/tabla.js' %}"></script>
+<script src="{% static 'js/validate.js' %}"></script>
+{% endblock content %}
+

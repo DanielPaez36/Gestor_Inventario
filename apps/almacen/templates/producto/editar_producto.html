@@ -1,0 +1,77 @@
+{% extends "layouts/plantilla.html" %}
+{% load static %}
+
+{% block title %}
+Editar-Producto
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 text-center">EDITAR PRODUCTO</h1>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Producto</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para agregar producto -->
+                <form action="{% url 'procesar_editar_producto' %}" method="POST" id="form_producto">
+                    {% csrf_token %}
+                    <input type="text" name="id" value="{{producto.id}}" hidden name="id" id="id"/>
+                    <div class="mb-4">
+                        <label for="nombre_prod" class="form-label">Producto</label>
+                        <input type="text" name="nombre_prod" placeholder="Salsas" id="nombre_prod" required class="form-control" value="{{producto.nombre_prod}}" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="descripcion_prod" class="form-label">Descripción Del producto</label>
+                        <input type="text" name="descripcion_prod" placeholder="Descripción del producto" id="descripcion_prod" required class="form-control" value="{{producto.descripcion_prod}}"/>
+                    </div>
+                    <div class="mb-4">
+                        <label for="fk_id_categoria" class="form-label">Categoria</label>
+                        <select class="form-control" name="fk_id_categoria" id="fk_id_categoria">
+                            <option value="">-- Seleccione la categoria --</option>
+                            {% for categoria in categorias %}
+                                <option value="{{categoria.id}}">{{categoria.nombre_cat}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="precio_prod" class="form-label">Precio Del producto</label>
+                        <input type="text" name="precio_prod" placeholder="Ejemplo: 1500.00" id="precio_prod" required class="form-control" value="{{producto.precio_prod}}"/>
+                    </div>
+                    <div class="mb-4">
+                        <label for="stock_prod" class="form-label">Stock</label>
+                        <input type="number" name="stock_prod" placeholder="Ejemplo: 10" id="stock_prod" required class="form-control" min="0" value="{{producto.stock_prod}}"/>
+                    </div>
+                    <div class="mb-4">
+                        <label for="codigo_barras_prod" class="form-label">Código de Barras</label>
+                        <input type="text" name="codigo_barras_prod" placeholder="Ejemplo: 1234567890123" id="codigo_barras_prod" required class="form-control" maxlength="13" pattern="\d{12,13}" title="Debe contener entre 12 y 13 dígitos numéricos."
+                        value="{{producto.codigo_barras_prod}}"/>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{% url "productos" %}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Actualizar Carrera</button>
+                      </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById('exampleModal')
+    document.addEventListener('DOMContentLoaded', () => {
+        const myModal = new bootstrap.Modal(modal)
+        myModal.show()
+    });
+
+    document.getElementById("fk_id_categoria").value = "{{producto.fk_id_categoria.id}}";
+
+</script>
+
+{% endblock content %}
+

@@ -1,0 +1,107 @@
+{% extends "layouts/plantilla.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+Productos
+{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="text-center mt-4">PRODUCTOS</h1>
+    <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Agregar Producto</button>
+    <!--Verifica si hay productos-->
+    {% if productos %}
+        <div class="table-responsive">
+            <table class="table table-hover table-striped text-center" id="tabla">
+                <thead class="thead-primary">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Descripción</th>
+                        <th>Categoria</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Codigo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                        <tr>
+                            <td>{{producto.nombre_prod}}</td>
+                            <td>{{producto.descripcion_prod}}</td>
+                            <td>{{producto.fk_id_categoria}}</td>
+                            <td>{{producto.precio_prod|floatformat:2|intcomma}}</td>
+                            <td>{{producto.stock_prod}}</td>
+                            <td>{{producto.codigo_barras_prod}}</td>
+                            <td>
+                                <a href="{% url 'editar_producto' id=producto.id %}" class="btn btn-warning">Editar</a>
+                                <a href="javascript:void(0)" onclick="eliminarFila('/eliminar_producto/{{ producto.id }}', 'Producto')" class="btn btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-warning mt-4 text-center">NO HAY REGISTROS</div>
+    {% endif %}
+</div>
+
+<!-- Modal Agregar Productos -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Producto</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para agregar producto -->
+                <form action="{% url 'crear_producto' %}" method="POST" id="form_producto">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="nombre_prod" class="form-label">Producto</label>
+                        <input type="text" name="nombre_prod" placeholder="Salsas" id="nombre_prod" required class="form-control" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="descripcion_prod" class="form-label">Descripción Del producto</label>
+                        <input type="text" name="descripcion_prod" placeholder="Descripción del producto" id="descripcion_prod" required class="form-control" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="fk_id_categoria" class="form-label">Categoria</label>
+                        <select class="form-control" name="fk_id_categoria" id="fk_id_categoria">
+                            <option value="">-- Seleccione la categoria --</option>
+                            {% for categoria in categorias %}
+                                <option value="{{categoria.id}}">{{categoria.nombre_cat}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="precio_prod" class="form-label">Precio Del producto</label>
+                        <input type="text" name="precio_prod" placeholder="Ejemplo: 1500.00" id="precio_prod" required class="form-control" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="stock_prod" class="form-label">Stock</label>
+                        <input type="number" name="stock_prod" placeholder="Ejemplo: 10" id="stock_prod" required class="form-control" min="0" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="codigo_barras_prod" class="form-label">Código de Barras</label>
+                        <input type="text" name="codigo_barras_prod" placeholder="Ejemplo: 1234567890123" id="codigo_barras_prod" required class="form-control" maxlength="13" pattern="\d{12,13}" title="Debe contener entre 12 y 13 dígitos numéricos."
+                        />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Agregar Producto</button>
+                      </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/tabla.js' %}"></script>
+<script src="{% static 'js/validate.js' %}"></script>
+
+{% endblock content %}

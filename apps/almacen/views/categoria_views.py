@@ -17,6 +17,10 @@ def crear_categoria(request):
         nombre = request.POST['nombre_cat']
         descripcion = request.POST['descripcion_cat']
 
+        if Categoria.objects.filter(nombre_cat=nombre).exists():
+            messages.error(request, 'El nombre de la categoría ya existe.')
+            return redirect('categorias')
+
         Categoria.objects.create(
             nombre_cat=nombre,
             descripcion_cat=descripcion
@@ -42,6 +46,10 @@ def procesar_editar_categoria(request):
         id = request.POST['id']
         nombre = request.POST['nombre_cat']
         descripcion = request.POST['descripcion_cat']
+
+        if Categoria.objects.filter(nombre_cat=nombre).exists():
+            messages.error(request, 'El nombre de la categoría ya existe.')
+            return redirect('categorias')
 
         categoria_editar = Categoria.objects.get(id=id)
         categoria_editar.nombre_cat = nombre

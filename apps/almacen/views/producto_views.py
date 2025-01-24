@@ -62,10 +62,6 @@ def procesar_editar_producto(request):
         codigo_barras = request.POST['codigo_barras_prod']
         fk_id_categoria = request.POST['fk_id_categoria']
 
-        if Producto.objects.filter(codigo_barras_prod=codigo_barras).exists() or Producto.objects.filter(nombre_prod=nombre).exists():
-            messages.error(request, 'El nombre o el codigo de barras le pertenece a otro producto.')
-            return redirect('productos')
-
         categoria_selec = Categoria.objects.get(id=fk_id_categoria)
         producto_editar = Producto.objects.get(id=id)
         producto_editar.nombre_prod = nombre

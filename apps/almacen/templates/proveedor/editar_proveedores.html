@@ -1,0 +1,59 @@
+{% extends "layouts/plantilla.html" %}
+{% load static %}
+
+{% block title %}
+Editar-Proveedores
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 text-center">EDITAR PROVEEDOR</h1>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Proveedor</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para agregar producto -->
+                <form action="{% url 'procesar_editar_proveedor' %}" method="POST" id="form_proveedor">
+                    {% csrf_token %}
+                    <input type="text" name="id" value="{{ proveedor.id }}" hidden id="id"/>
+                    <div class="mb-4">
+                        <label for="nombre_prov" class="form-label">Nombre del proveedor</label>
+                        <input type="text" name="nombre_prov" placeholder="Proveedor Global S.A.lio" id="nombre_prov" required class="form-control" value="{{proveedor.nombre_prov}}"/>
+                    </div>
+                    <div class="mb-4">
+                        <label for="direccion_prov" class="form-label">Dirección del proveedor</label>
+                        <input type="text" name="direccion_prov" placeholder="Calle Ficticia 123, Ciudad X" id="direccion_prov" required class="form-control" value="{{proveedor.direccion_prov}}"/>
+                    </div>
+                    <div class="mb-4">
+                        <label for="telefono_prov" class="form-label">Telefono del proveedor</label>
+                        <input type="text" name="telefono_prov" placeholder="123-456-7890" id="telefono_prov" required class="form-control" maxlength="15" value="{{proveedor.telefono_prov}}"/>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email_prov" class="form-label">Correo electronico</label>
+                        <input type="email" name="email_prov" placeholder="contacto@global.com" id="email_prov" required class="form-control" value="{{proveedor.email_prov}}"/>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{% url "proveedores" %}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Actualizar Carrera</button>
+                      </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById('exampleModal')
+    document.addEventListener('DOMContentLoaded', () => {
+        const myModal = new bootstrap.Modal(modal)
+        myModal.show()
+    });
+</script>
+
+{% endblock content %}

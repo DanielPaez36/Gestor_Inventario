@@ -1,0 +1,85 @@
+{% extends "layouts/plantilla.html" %}
+{% load static %}
+
+{% block title %}
+Proveedores
+{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <!--Titulo-->
+    <h1 class="text-center mt-4">PROVEEDORES</h1>
+    <!--Verifica si hay caegorias-->
+    <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Agregar Proveedor</button>
+    {% if proveedores %}
+    <div class="table-responsive">
+        <table class="table table-hover table-striped text-center" id="tabla">
+            <thead class="thead-primary">
+                <tr>
+                    <th>Nombre del proveedor</th>
+                    <th>Dirección</th>
+                    <th>telefono</th>
+                    <th>Correo electronico</th>
+                </tr>                
+            </thead>
+            <tbody>
+                {% for proveedor in proveedores %}
+                    <tr>
+                        <td>{{proveedor.nombre_prov}}</td>
+                        <td>{{proveedor.direccion_prov}}</td>
+                        <td>{{proveedor.telefono_prov}}</td>
+                        <td>{{proveedor.email_prov}}</td>
+                        <td>
+                            <a href="{% url 'editar_proveedor' id=proveedor.id %}" class="btn btn-warning">Editar</a>
+                            <a href="javascript:void(0)" onclick="eliminarFila('/eliminar_proveedor/{{ proveedor.id }}', 'Proveedor')" class="btn btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="alert alert-warning mt-4 text-center">NO HAY REGISTROS</div>
+    {% endif %}
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar proveedor</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'crear_proveedor' %}" method="POST" id="form_categoria">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="nombre_prov" class="form-label">Nombre del proveedor</label>
+                        <input type="text" name="nombre_prov" placeholder="Proveedor Global S.A.lio" id="nombre_prov" required class="form-control" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="direccion_prov" class="form-label">Dirección del proveedor</label>
+                        <input type="text" name="direccion_prov" placeholder="Calle Ficticia 123, Ciudad X" id="direccion_prov" required class="form-control" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="telefono_prov" class="form-label">Telefono del proveedor</label>
+                        <input type="text" name="telefono_prov" placeholder="123-456-7890" id="telefono_prov" required class="form-control" maxlength="15" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="email_prov" class="form-label">Correo electronico</label>
+                        <input type="email" name="email_prov" placeholder="contacto@global.com" id="email_prov" required class="form-control" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Agregar Proveedor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/tabla.js' %}"></script>
+
+{% endblock content %}

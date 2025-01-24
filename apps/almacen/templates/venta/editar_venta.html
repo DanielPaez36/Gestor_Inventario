@@ -1,0 +1,62 @@
+{% extends "layouts/plantilla.html" %}
+{% load static %}
+
+{% block title %}
+Editar-Venta
+{% endblock title %}
+
+{% block content %}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editarVentaLabel">Editar Venta</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para editar la venta -->
+                <form action="{% url 'procesar_editar_venta' %}" method="POST" id="form_venta">
+                    {% csrf_token %}
+                    <input type="text" name="id" value="{{venta.id}}" hidden name="id" id="id"/>
+                    <div class="mb-4">
+                        <label for="fecha_venta" class="form-label">Fecha de Venta</label>
+                        <input type="date" name="fecha_venta" id="fecha_venta" required class="form-control" value="{{venta.fecha_venta|date:'Y-m-d'}}" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="productos" class="form-label">Productos</label>
+                        <select class="form-control" name="fk_id_producto" id="fk_id_producto">
+                            <option value="">-- Seleccione la categoria --</option>
+                            {% for producto in productos %}
+                                <option value="{{ producto.id }}">{{ producto.nombre_prod }} - {{ producto.precio_prod|floatformat:2 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="cantidad" class="form-label">Cantidad</label>
+                        <input type="number" name="cantidad" id="cantidad" min="1" class="form-control" required value="{{cantidad}}"/>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <a href="{% url "ventas" %}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Actualizar Producto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const modal = document.getElementById('exampleModal')
+    document.addEventListener('DOMContentLoaded', () => {
+        const myModal = new bootstrap.Modal(modal)
+        myModal.show()
+    });
+
+    document.getElementById("fk_id_producto").value = "{{venta.fk_id_producto.id}}";
+
+</script>
+
+{% endblock content %}

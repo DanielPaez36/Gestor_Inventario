@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.almacen.views import categoria_views, producto_views, proveedor_views
+from apps.almacen.views import categoria_views, producto_views, proveedor_views, venta_views
 
 urlpatterns = [
 
@@ -26,4 +26,11 @@ urlpatterns = [
     path('eliminar_proveedor/<int:id>/', proveedor_views.eliminar_proveedor, name='eliminar_proveedor'),
     path('editar_proveedor/<int:id>/', proveedor_views.editar_proveedor, name='editar_proveedor'),
     path('procesar_editar_proveedor/', proveedor_views.procesar_editar_proveedor, name='procesar_editar_proveedor'),
+
+    #Ventas
+    path('ventas/', venta_views.ventas, name='ventas'),
+    path('crear_venta/', venta_views.crear_venta, name='crear_venta'),
+    path('eliminar_venta/<int:id>/', venta_views.eliminar_venta, name='eliminar_venta'),
+    path('editar_venta/<int:id>/', venta_views.editar_venta, name='editar_venta'),
+    path('procesar_editar_venta/', venta_views.procesar_editar_venta, name='procesar_editar_venta'),
 ]

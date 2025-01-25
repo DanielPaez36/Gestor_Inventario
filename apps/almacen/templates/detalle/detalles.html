@@ -1,0 +1,45 @@
+{% extends "layouts/plantilla.html" %}
+{% load static %}
+{% load humanize %}
+
+
+{% block title %}
+Detalles de la Venta
+{% endblock title %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="card" style="width: 30rem;">
+      <div class="card-header text-center">
+        <h5 class="card-title">Detalles de la Venta</h5>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <strong>ID de Venta:</strong> {{ venta.id }}
+          </li>
+          <li class="list-group-item">
+            <strong>Fecha de la Venta:</strong> {{ venta.fecha_venta }}
+          </li>
+          <li class="list-group-item">
+            <strong>Producto:</strong> {{ venta.fk_id_producto.nombre_prod }}
+          </li>
+          <li class="list-group-item">
+            <strong>Cantidad del producto vendido:</strong> {{ cantidad }}
+          </li>
+          <li class="list-group-item">
+            <strong>Precio unitario:</strong> ${{ venta.fk_id_producto.precio_prod|floatformat:2|intcomma }}
+          </li>
+          <li class="list-group-item">
+            <strong>Total de la Venta:</strong> ${{ venta.total_venta|floatformat:2|intcomma }}
+          </li>
+        </ul>
+      </div>
+      <div class="card-footer text-center">
+        <a href="{% url 'ventas' %}" class="btn btn-secondary">Volver a Ventas</a>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

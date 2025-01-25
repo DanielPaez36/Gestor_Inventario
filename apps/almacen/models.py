@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Categoria(models.Model):
     nombre_cat = models.CharField(max_length=100, unique=True)
@@ -28,7 +29,7 @@ class Proveedor(models.Model):
         return self.nombre_prov
 
 class Venta(models.Model):
-    fecha_venta = models.DateField(auto_now_add=True)
+    fecha_venta = models.DateField(default=timezone.now)
     total_venta = models.DecimalField(max_digits=10, decimal_places=2)
     fk_id_producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True)
 

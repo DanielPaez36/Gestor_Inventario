@@ -18,6 +18,11 @@ def crear_venta(request):
         fk_id_producto = request.POST['productos']
         producto_selec = Producto.objects.get(id=fk_id_producto)
 
+        # Verificar si hay suficiente stock
+        if producto_selec.stock_prod < cantidad:
+            messages.error(request, f"No hay suficiente stock para {producto_selec.nombre_prod}. Disponible: {producto_selec.stock_prod}.")
+            return redirect('ventas')
+
         # Calcular el total (precio del producto * cantidad)
         total = producto_selec.precio_prod * cantidad
 
@@ -27,6 +32,10 @@ def crear_venta(request):
             total_venta=total,
             fk_id_producto=producto_selec
         )
+
+        # Reducir el stock del producto
+        producto_selec.stock_prod -= cantidad
+        producto_selec.save()
 
         messages.success(request, 'Venta creada correctamente')
         return redirect('ventas')
@@ -53,25 +62,33 @@ def editar_venta(request, id):
 
 def procesar_editar_venta(request):
     if request.method == 'POST':
-        # Obtener los datos enviados desde el formulario
         id = request.POST['id']
         fecha = request.POST['fecha_venta']
         cantidad = int(request.POST['cantidad'])  # Obtener la cantidad del formulario
         fk_id_producto = request.POST['fk_id_producto']
-
-        # Obtener el producto y la venta que se va a editar
         producto_selec = Producto.objects.get(id=fk_id_producto)
         venta_editar = Venta.objects.get(id=id)
+
+        # Obtener la cantidad previa para calcular el ajuste en stock
+        cantidad_previa = int(venta_editar.total_venta / producto_selec.precio_prod)
+
+        # Verificar si hay suficiente stock para ajustar
+        diferencia_stock = cantidad - cantidad_previa
+        if producto_selec.stock_prod < diferencia_stock:
+            messages.error(request, f"No hay suficiente stock para {producto_selec.nombre_prod}. Disponible: {producto_selec.stock_prod}.")
+            return redirect('ventas')
 
         # Recalcular el total (precio del producto * cantidad)
         total = producto_selec.precio_prod * cantidad
 
-        # Actualizar los valores de la venta
         venta_editar.fecha_venta = fecha
         venta_editar.total_venta = total
         venta_editar.fk_id_producto = producto_selec
         venta_editar.save()
 
-        # Mensaje de éxito
+        # Ajustar el stock del producto
+        producto_selec.stock_prod -= diferencia_stock
+        producto_selec.save()
+
         messages.success(request, 'Venta editada correctamente')
         return redirect('ventas')

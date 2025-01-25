@@ -65,16 +65,16 @@ Ventas
                     </div>
                     <div class="mb-4">
                         <label for="productos" class="form-label">Productos</label>
-                        <select class="form-control" name="productos" id="productos"
-                            <option value="">-- Seleccione la categoria --</option>
+                        <select class="form-control" name="productos" id="productos">
+                            <option value="">-- Seleccione el producto --</option>
                             {% for producto in productos %}
-                                <option value="{{ producto.id }}">{{ producto.nombre_prod }} - {{ producto.precio_prod|floatformat:2 }}</option>
+                                <option value="{{ producto.id }}">{{ producto.nombre_prod }} - {{ producto.precio_prod|floatformat:2 }} - Stock: {{producto.stock_prod}}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="mb-4">
                         <label for="cantidad" class="form-label">Cantidad</label>
-                        <input type="number" name="cantidad" id="cantidad" min="1" class="form-control" required />
+                        <input type="number" name="cantidad" placeholder="Ej: 1,2,3..." id="cantidad" min="1" class="form-control" required />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

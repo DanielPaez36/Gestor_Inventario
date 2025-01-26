@@ -33,6 +33,12 @@ Detalles de la Compra
             <li class="list-group-item">
               {{ detalle.fk_id_producto.nombre_prod }}
             </li>
+            <li class="list-group-item">
+              Cantidad: {{ detalle.cantidad }}
+            </li>
+            <li class="list-group-item">
+              Precio Unitario: ${{ detalle.precio_unitario|floatformat:2 }}
+            </li>
           {% endfor %}
         </ul>
       </div>

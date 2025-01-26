@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.almacen.views import categoria_views, producto_views, proveedor_views, venta_views, detalles_views
+from apps.almacen.views import categoria_views, producto_views, proveedor_views, venta_views, detalles_views, compra_views
 
 urlpatterns = [
 
@@ -36,4 +36,10 @@ urlpatterns = [
 
     #Detalles
     path('detalles/<int:id>/', detalles_views.detalles, name='detalles'),
+
+    #Compras
+    path('compras/', compra_views.compras, name='compras'),
+    path('crear_compra/', compra_views.crear_compra, name='crear_compra'),
+    path('eliminar_compra/<int:id>/', compra_views.eliminar_compra, name='eliminar_compra'),
+    path('detalles_compra/<int:id>/', compra_views.detalles_compra, name='detalles_compra'),
 ]

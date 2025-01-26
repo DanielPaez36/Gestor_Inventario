@@ -1,0 +1,44 @@
+{% extends "layouts/plantilla.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+Detalles de la Compra
+{% endblock title %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="card" style="width: 30rem;">
+      <div class="card-header text-center">
+        <h5 class="card-title">Detalles de la Compra</h5>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <strong>ID de Compra:</strong> {{ compra.id }}
+          </li>
+          <li class="list-group-item">
+            <strong>Fecha de la Compra:</strong> {{ compra.fecha_compra }}
+          </li>
+          <li class="list-group-item">
+            <strong>Proveedor:</strong> {{ compra.fk_id_proveedor }}
+          </li>
+          <li class="list-group-item">
+            <strong>Total de la Compra:</strong> ${{ compra.total_compra|floatformat:2|intcomma }}
+          </li>
+        </ul>
+        <h6 class="mt-4">Producto Comprado:</h6>
+        <ul class="list-group">
+          {% for detalle in detalles %}
+            <li class="list-group-item">
+              {{ detalle.fk_id_producto.nombre_prod }}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="card-footer text-center">
+        <a href="{% url 'compras' %}" class="btn btn-secondary">Volver a Compras</a>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

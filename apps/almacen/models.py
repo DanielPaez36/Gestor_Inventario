@@ -8,17 +8,6 @@ class Categoria(models.Model):
     def __str__(self):
         return self.nombre_cat
     
-class Producto(models.Model):
-    nombre_prod = models.CharField(max_length=100)
-    descripcion_prod = models.TextField(blank=True, null=True)
-    precio_prod = models.DecimalField(max_digits=10, decimal_places=2)
-    stock_prod = models.PositiveIntegerField(default=0)
-    codigo_barras_prod = models.CharField(max_length=100, unique=True, blank=True, null=True)
-    fk_id_categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return self.nombre_prod
-
 class Proveedor(models.Model):
     nombre_prov = models.CharField(max_length=100)
     direccion_prov = models.TextField(blank=True, null=True)
@@ -27,6 +16,18 @@ class Proveedor(models.Model):
 
     def __str__(self):
         return self.nombre_prov
+
+class Producto(models.Model):
+    nombre_prod = models.CharField(max_length=100)
+    descripcion_prod = models.TextField(blank=True, null=True)
+    precio_prod = models.DecimalField(max_digits=10, decimal_places=2)
+    stock_prod = models.PositiveIntegerField(default=0)
+    codigo_barras_prod = models.CharField(max_length=100, unique=True, blank=True, null=True)
+    fk_id_categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)
+    fk_id_proveedor = models.ForeignKey(Proveedor, on_delete=models.SET_NULL, null=True)  # Nueva relación
+
+    def __str__(self):
+        return self.nombre_prod
 
 class Venta(models.Model):
     fecha_venta = models.DateField(default=timezone.now)
@@ -47,7 +48,7 @@ class Detalle_Venta(models.Model):
     
 class Compra(models.Model):
     fk_id_proveedor = models.ForeignKey(Proveedor, on_delete=models.SET_NULL, null=True)
-    fecha_compra = models.DateField(auto_now_add=True)
+    fecha_compra = models.DateField(default=timezone.now)
     total_compra = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):

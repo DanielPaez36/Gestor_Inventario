@@ -6,47 +6,61 @@ Inicio - Mi Tienda
 
 {% block content %}
 <div class="container mt-5">
-    <div class="jumbotron text-center">
-        <h1 class="display-4">Bienvenido a Mi Tienda</h1>
-        <p class="lead">Administra tus productos, categorías, proveedores y ventas de manera eficiente.</p>
+    <div class="jumbotron text-center bg-light p-5 rounded-lg shadow">
+        <h1 class="display-4 font-weight-bold">Bienvenido a Mi Tienda</h1>
+        <p class="lead text-muted">Administra tus productos, categorías, proveedores y ventas de manera eficiente.</p>
         <hr class="my-4">
-        <p>Utiliza el menú de navegación para acceder a las diferentes secciones del sistema.</p>
+        <p class="text-muted">Utiliza el menú de navegación para acceder a las diferentes secciones del sistema.</p>
     </div>
 
     <div class="row mt-5">
-        <div class="col-md-3">
-            <div class="card text-center h-100">
+        <div class="col-md-3 mb-4">
+            <div class="card text-center h-100 shadow-sm">
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">Categorías</h5>
-                    <p class="card-text flex-grow-1">Gestiona las categorías de productos.</p>
-                    <a href="{% url 'categorias' %}" class="btn btn-primary mt-auto">Ver Categorías</a>
+                    <i class="fas fa-tags fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title text-primary">Categorías</h5>
+                    <p class="card-text flex-grow-1 text-muted">Gestiona las categorías de productos.</p>
+                    <a href="{% url 'categorias' %}" class="btn btn-outline-primary mt-auto">Ver Categorías</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center h-100">
+        <div class="col-md-3 mb-4">
+            <div class="card text-center h-100 shadow-sm">
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">Productos</h5>
-                    <p class="card-text flex-grow-1">Administra los productos disponibles en la tienda.</p>
-                    <a href="{% url 'productos' %}" class="btn btn-primary mt-auto">Ver Productos</a>
+                    <i class="fas fa-box-open fa-3x text-success mb-3"></i>
+                    <h5 class="card-title text-success">Productos</h5>
+                    <p class="card-text flex-grow-1 text-muted">Administra los productos disponibles en la tienda.</p>
+                    <a href="{% url 'productos' %}" class="btn btn-outline-success mt-auto">Ver Productos</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center h-100">
+        <div class="col-md-3 mb-4">
+            <div class="card text-center h-100 shadow-sm">
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">Proveedores</h5>
-                    <p class="card-text flex-grow-1">Gestiona la información de los proveedores.</p>
-                    <a href="{% url 'proveedores' %}" class="btn btn-primary mt-auto">Ver Proveedores</a>
+                    <i class="fas fa-truck fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title text-warning">Proveedores</h5>
+                    <p class="card-text flex-grow-1 text-muted">Gestiona la información de los proveedores.</p>
+                    <a href="{% url 'proveedores' %}" class="btn btn-outline-warning mt-auto">Ver Proveedores</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center h-100">
+        <div class="col-md-3 mb-4">
+            <div class="card text-center h-100 shadow-sm">
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">Ventas</h5>
-                    <p class="card-text flex-grow-1">Revisa y administra las ventas realizadas.</p>
-                    <a href="{% url 'ventas' %}" class="btn btn-primary mt-auto">Ver Ventas</a>
+                    <i class="fas fa-chart-line fa-3x text-danger mb-3"></i>
+                    <h5 class="card-title text-danger">Ventas</h5>
+                    <p class="card-text flex-grow-1 text-muted">Revisa y administra las ventas realizadas.</p>
+                    <a href="{% url 'ventas' %}" class="btn btn-outline-danger mt-auto">Ver Ventas</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <i class="fas fa-shopping-cart fa-3x text-info mb-3"></i> <!-- Icono de compras -->
+                    <h5 class="card-title text-info">Compras</h5> <!-- Título en color azul -->
+                    <p class="card-text flex-grow-1 text-muted">Gestiona las compras realizadas a proveedores.</p>
+                    <a href="{% url 'compras' %}" class="btn btn-outline-info mt-auto">Ver Compras</a> <!-- Botón en color azul -->
                 </div>
             </div>
         </div>

@@ -20,6 +20,7 @@ Productos
                         <th>Producto</th>
                         <th>Descripción</th>
                         <th>Categoria</th>
+                        <th>Proveedor</th> <!-- Nueva columna para el proveedor -->
                         <th>Precio</th>
                         <th>Stock</th>
                         <th>Codigo</th>
@@ -32,6 +33,7 @@ Productos
                             <td>{{producto.nombre_prod}}</td>
                             <td>{{producto.descripcion_prod}}</td>
                             <td>{{producto.fk_id_categoria}}</td>
+                            <td>{{producto.fk_id_proveedor}}</td> <!-- Mostrar el proveedor -->
                             <td>{{producto.precio_prod|floatformat:2|intcomma}}</td>
                             <td>{{producto.stock_prod}}</td>
                             <td>{{producto.codigo_barras_prod}}</td>
@@ -75,6 +77,15 @@ Productos
                             <option value="">-- Seleccione la categoria --</option>
                             {% for categoria in categorias %}
                                 <option value="{{categoria.id}}">{{categoria.nombre_cat}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="fk_id_proveedor" class="form-label">Proveedor</label> <!-- Nuevo campo para proveedor -->
+                        <select class="form-control" name="fk_id_proveedor" id="fk_id_proveedor">
+                            <option value="">-- Seleccione el proveedor --</option>
+                            {% for proveedor in proveedores %}
+                                <option value="{{proveedor.id}}">{{proveedor.nombre_prov}}</option>
                             {% endfor %}
                         </select>
                     </div>

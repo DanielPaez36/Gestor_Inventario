@@ -1,0 +1,122 @@
+{% extends "layouts/plantilla.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+Compras
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mt-4">COMPRAS</h1>
+    <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Agregar Compra</button>
+
+    <!-- Verifica si hay compras -->
+    {% if compras %}
+        <div class="table-responsive">
+            <table class="table table-hover table-striped text-center" id="tabla">
+                <thead class="thead-primary">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Proveedor</th>
+                        <th>Total</th>
+                        <th>Detalles</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for compra in compras %}
+                        <tr>
+                            <td>{{ compra.fecha_compra }}</td>
+                            <td>{{ compra.fk_id_proveedor }}</td>
+                            <td>{{ compra.total_compra|floatformat:2|intcomma }}</td>
+                            <td>
+                                <a href="{% url 'detalles_compra' id=compra.id %}"><img src="{% static 'img/lista.png' %}" alt="" width="30"></a>
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)" onclick="eliminarFila('/eliminar_compra/{{ compra.id }}', 'Compra')" class="btn btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-warning mt-4 text-center">NO HAY REGISTROS</div>
+    {% endif %}
+</div>
+
+<!-- Modal Agregar Compra -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar Compra</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para agregar compra -->
+                <form action="{% url 'crear_compra' %}" method="POST" id="form_compra">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="fk_id_proveedor" class="form-label">Proveedor</label>
+                        <select class="form-control" name="fk_id_proveedor" id="fk_id_proveedor" required onchange="filtrarProductos()">
+                            <option value="">-- Seleccione el proveedor --</option>
+                            {% for proveedor in proveedores %}
+                                <option value="{{ proveedor.id }}">{{ proveedor.nombre_prov }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="fecha_compra" class="form-label">Fecha de Compra</label>
+                        <input type="date" name="fecha_compra" id="fecha_compra" required class="form-control" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="productos" class="form-label">Productos</label>
+                        <select class="form-control" name="productos[]" id="productos" multiple required>
+                            {% for producto in productos %}
+                                <option value="{{ producto.id }}" data-proveedor="{{ producto.fk_id_proveedor.id }}">
+                                    {{ producto.nombre_prod }} - {{ producto.precio_prod|floatformat:2 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="cantidades" class="form-label">Cantidades</label>
+                        <input type="number" name="cantidades[]" placeholder="Ej: 1,2,3..." id="cantidades" min="1" class="form-control" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="precios_unitarios" class="form-label">Precios Unitarios</label>
+                        <input type="number" name="precios_unitarios[]" placeholder="Ej: 10.50" id="precios_unitarios" step="0.01" class="form-control" required />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Agregar Compra</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filtrarProductos() {
+        const proveedorId = document.getElementById('fk_id_proveedor').value;
+        const productosSelect = document.getElementById('productos');
+        const productosOptions = productosSelect.options;
+
+        for (let i = 0; i < productosOptions.length; i++) {
+            const productoProveedorId = productosOptions[i].getAttribute('data-proveedor');
+            if (proveedorId === productoProveedorId || proveedorId === "") {
+                productosOptions[i].style.display = 'block';
+            } else {
+                productosOptions[i].style.display = 'none';
+            }
+        }
+    }
+</script>
+
+<script src="{% static 'js/tabla.js' %}"></script>
+<script src="{% static 'js/validate.js' %}"></script>
+
+{% endblock content %}

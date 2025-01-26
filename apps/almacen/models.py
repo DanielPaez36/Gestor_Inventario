@@ -68,7 +68,6 @@ class MovimientoInventario(models.Model):
     tipo_movimiento = models.CharField(max_length=50, choices=(('E', 'Entrada'), ('S', 'Salida')))
     cantidad = models.PositiveIntegerField()
     fecha_movimiento = models.DateField(auto_now_add=True)
-    descripcion_movimiento = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.tipo_movimiento} - {self.fecha_movimiento}"

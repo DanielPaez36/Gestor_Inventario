@@ -1,6 +1,5 @@
 from django.urls import path
-from apps.almacen.views import categoria_views, producto_views, proveedor_views, venta_views, detalles_views, compra_views, movimientoInventario_views
-
+from apps.almacen.views import categoria_views, producto_views, proveedor_views, venta_views, detalles_views, compra_views, movimientoInventario_views, exel_views
 urlpatterns = [
 
     #Inicio
@@ -45,8 +44,8 @@ urlpatterns = [
 
     #Movimientos
     path('movimientos/', movimientoInventario_views.listar_movimientos, name='movimientos'),
-    path('crear_movimiento/', movimientoInventario_views.crear_movimiento, name='crear_movimiento'),
-    path('editar_movimiento/<int:id>/', movimientoInventario_views.editar_movimiento, name='editar_movimiento'),
-    path('procesar_editar_movimiento/', movimientoInventario_views.procesar_editar_movimiento, name='procesar_editar_movimiento'),
     path('eliminar_movimiento/<int:id>/', movimientoInventario_views.eliminar_movimiento, name='eliminar_movimiento'),
+
+    #Exportar a Excel
+    path('exportar_movimientos_excel/', exel_views.exportar_movimientos_excel, name='exportar_movimientos_excel'),
 ]

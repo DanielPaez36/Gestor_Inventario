@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from ..models import Venta, Producto, Detalle_Venta
+from ..models import Venta, Producto, MovimientoInventario
 
 def ventas(request):
     ventas = Venta.objects.all()
@@ -14,16 +14,14 @@ def ventas(request):
 def crear_venta(request):
     if request.method == 'POST':
         fecha = request.POST['fecha_venta']
-        cantidad = int(request.POST['cantidad'])  # Obtener la cantidad del formulario
+        cantidad = int(request.POST['cantidad'])
         fk_id_producto = request.POST['productos']
         producto_selec = Producto.objects.get(id=fk_id_producto)
 
-        # Verificar si hay suficiente stock
         if producto_selec.stock_prod < cantidad:
             messages.error(request, f"No hay suficiente stock para {producto_selec.nombre_prod}. Disponible: {producto_selec.stock_prod}.")
             return redirect('ventas')
 
-        # Calcular el total (precio del producto * cantidad)
         total = producto_selec.precio_prod * cantidad
 
         # Crear la venta
@@ -37,7 +35,14 @@ def crear_venta(request):
         producto_selec.stock_prod -= cantidad
         producto_selec.save()
 
-        messages.success(request, 'Venta creada correctamente')
+        # Registrar movimiento de inventario
+        MovimientoInventario.objects.create(
+            fk_id_producto=producto_selec,
+            tipo_movimiento='S',  # Salida
+            cantidad=cantidad
+        )
+
+        messages.success(request, 'Venta creada correctamente.')
         return redirect('ventas')
     
 def eliminar_venta(request, id):

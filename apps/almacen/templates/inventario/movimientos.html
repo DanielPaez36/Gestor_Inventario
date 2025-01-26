@@ -1,0 +1,98 @@
+{% extends "layouts/plantilla.html" %}
+{% load static %}
+
+{% block title %}
+Movimientos de Inventario
+{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <!--Titulo-->
+    <h1 class="text-center mt-4">MOVIMIENTOS DE INVENTARIO</h1>
+    <!--Verifica si hay movimientos-->
+    <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#agregarMovimientoModal">+ Agregar Movimiento</button>
+    {% if movimientos %}
+    <div class="table-responsive">
+        <table class="table table-hover table-striped text-center" id="tabla">
+            <thead class="thead-primary">
+                <tr>
+                    <th>Producto</th>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                    <th>Fecha</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movimiento in movimientos %}
+                    <tr>
+                        <td>{{ movimiento.fk_id_producto.nombre_prod }}</td>
+                        <td>{{ movimiento.get_tipo_movimiento_display }}</td>
+                        <td>{{ movimiento.cantidad }}</td>
+                        <td>{{ movimiento.fecha_movimiento }}</td>
+                        <td>{{ movimiento.descripcion_movimiento }}</td>
+                        <td>
+                            <a href="{% url 'editar_movimiento' id=movimiento.id %}" class="btn btn-warning">Editar</a>
+                            <a href="javascript:void(0)" onclick="eliminarFila('/eliminar_movimiento/{{ movimiento.id }}', 'MovimientoInventario')" class="btn btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-warning mt-4 text-center">NO HAY REGISTROS</div>
+    {% endif %}
+</div>
+
+<!-- Modal Agregar Movimiento -->
+<div class="modal fade" id="agregarMovimientoModal" tabindex="-1" aria-labelledby="agregarMovimientoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="agregarMovimientoModalLabel">Agregar Movimiento</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para agregar movimiento -->
+                <form action="{% url 'crear_movimiento' %}" method="POST" id="form_movimiento">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="fk_id_producto" class="form-label">Producto</label>
+                        <select class="form-control" name="fk_id_producto" id="fk_id_producto" required>
+                            <option value="">-- Seleccione un producto --</option>
+                            {% for producto in productos %}
+                                <option value="{{ producto.id }}">{{ producto.nombre_prod }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="tipo_movimiento" class="form-label">Tipo de Movimiento</label>
+                        <select class="form-control" name="tipo_movimiento" id="tipo_movimiento" required>
+                            <option value="E">Entrada</option>
+                            <option value="S">Salida</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="cantidad" class="form-label">Cantidad</label>
+                        <input type="number" name="cantidad" id="cantidad" class="form-control" required min="1">
+                    </div>
+                    <div class="mb-4">
+                        <label for="descripcion_movimiento" class="form-label">Descripción</label>
+                        <textarea name="descripcion_movimiento" id="descripcion_movimiento" class="form-control"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Agregar Movimiento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/tabla.js' %}"></script>
+<script src="{% static 'js/validate.js' %}"></script>
+{% endblock content %}

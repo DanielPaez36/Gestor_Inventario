@@ -1,0 +1,69 @@
+{% extends "layouts/plantilla.html" %}
+{% load static %}
+
+{% block title %}
+Editar Movimiento
+{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="mt-4 text-center">EDITAR MOVIMIENTO</h1>
+</div>
+
+<div class="modal fade" id="editarMovimientoModal" tabindex="-1" aria-labelledby="editarMovimientoModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editarMovimientoModalLabel">EDITAR MOVIMIENTO</h1>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para editar movimiento -->
+                <form action="{% url 'procesar_editar_movimiento' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ movimiento.id }}">
+                    <div class="mb-4">
+                        <label for="fk_id_producto" class="form-label">Producto</label>
+                        <select class="form-control" name="fk_id_producto" id="fk_id_producto" required>
+                            <option value="">-- Seleccione un producto --</option>
+                            {% for producto in productos %}
+                                <option value="{{ producto.id }}" {% if movimiento.fk_id_producto.id == producto.id %}selected{% endif %}>
+                                    {{ producto.nombre_prod }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="tipo_movimiento" class="form-label">Tipo de Movimiento</label>
+                        <select class="form-control" name="tipo_movimiento" id="tipo_movimiento" required>
+                            <option value="E" {% if movimiento.tipo_movimiento == 'E' %}selected{% endif %}>Entrada</option>
+                            <option value="S" {% if movimiento.tipo_movimiento == 'S' %}selected{% endif %}>Salida</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="cantidad" class="form-label">Cantidad</label>
+                        <input type="number" name="cantidad" id="cantidad" class="form-control" required min="1" value="{{ movimiento.cantidad }}">
+                    </div>
+                    <div class="mb-4">
+                        <label for="descripcion_movimiento" class="form-label">Descripción</label>
+                        <textarea name="descripcion_movimiento" id="descripcion_movimiento" class="form-control">{{ movimiento.descripcion_movimiento }}</textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{% url 'movimientos' %}" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Actualizar Movimiento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById('editarMovimientoModal')
+    document.addEventListener('DOMContentLoaded', () => {
+        const myModal = new bootstrap.Modal(modal)
+        myModal.show()
+    })
+</script>
+
+{% endblock content %}
